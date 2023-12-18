@@ -11,6 +11,7 @@ class Car {
         this.max_speed = 3;
         this.friction = 0.05;
         this.angle = 0;
+        this.sensors = new Sensors(this);
     }
 
     draw(context) {
@@ -27,6 +28,9 @@ class Car {
         );
         context.fill();
         context.restore();
+
+        // Draw Sensor Rays
+        this.sensors.draw(context);
     }
 
     update() {
@@ -49,7 +53,7 @@ class Car {
         if (Math.abs(this.speed) < this.friction) { this.speed = 0; }
 
         // Angle Movement
-        const reverse = this.speed > 0 ? 1 : -1;
+        const reverse = this.speed >= 0 ? 1 : -1;
         if (this.controls.left) { this.angle += 0.03 * reverse; }
         if (this.controls.right) { this.angle -= 0.03 * reverse; }
 
@@ -58,6 +62,12 @@ class Car {
         this.x -= Math.sin(this.angle) * this.speed;
 
         ////////// CAR MOVEMENT CODE - END //////////
+
+        ////////// UPDATE SENSORS //////////
+
+        this.sensors.update();
+
+        ////////// UPDATE SENSORS - END //////////
 
         
     }
