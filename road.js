@@ -19,17 +19,16 @@ class Road {
         context.lineWidth = 5;
         context.strokeStyle = 'white';
 
-        // Draw the left-side of the road
-        context.beginPath();
-        context.moveTo(this.left, this.top);
-        context.lineTo(this.left, this.bottom);
-        context.stroke();
+        for (let i = 0; i <= this.lanes; i++) {
+            const x_val = lerp(this.left, this.right, i / this.lanes);
 
-        // Draw the right-side line fo the road
-        context.beginPath();
-        context.moveTo(this.right, this.top);
-        context.lineTo(this.right, this.bottom);
-        context.stroke();
+            // Draw the lanes of the road
+            context.beginPath();
+            context.moveTo(x_val, this.top);
+            context.lineTo(x_val, this.bottom);
+            context.stroke();
+        }
+        
 
     }
 }
