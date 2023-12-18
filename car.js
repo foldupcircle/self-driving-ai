@@ -7,9 +7,9 @@ class Car {
         this.height = height;
         this.controls = new Controls();
         this.speed = 0;
-        this.acceleration = 0.2;
-        this.max_speed = 3;
-        this.friction = 0.05;
+        this.acceleration = 1;
+        this.max_speed = 5;
+        this.friction = 0.2;
         this.angle = 0;
         this.sensors = new Sensors(this);
     }
@@ -26,6 +26,7 @@ class Car {
             this.width,
             this.height
         );
+        
         context.fill();
         context.restore();
 
@@ -33,7 +34,7 @@ class Car {
         this.sensors.draw(context);
     }
 
-    update() {
+    update(borders) {
 
         ////////// CAR MOVEMENT CODE //////////
 
@@ -65,7 +66,7 @@ class Car {
 
         ////////// UPDATE SENSORS //////////
 
-        this.sensors.update();
+        this.sensors.update(borders);
 
         ////////// UPDATE SENSORS - END //////////
 
