@@ -30,6 +30,9 @@ class Car {
     }
 
     update() {
+
+        ////////// CAR MOVEMENT CODE //////////
+
         // Keyboard control updates
         if (this.controls.forward) { this.speed += this.acceleration; }
         if (this.controls.reverse) { this.speed -= this.acceleration; }
@@ -54,5 +57,8 @@ class Car {
         this.y -= Math.cos(this.angle) * this.speed;
         this.x -= Math.sin(this.angle) * this.speed;
 
+        ////////// CAR MOVEMENT CODE - END //////////
+
+        
     }
 }
