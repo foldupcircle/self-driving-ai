@@ -20,6 +20,11 @@ class Road {
         context.strokeStyle = 'white';
 
         for (let i = 0; i <= this.lanes; i++) {
+
+            // Set Lines to dashes for lanes, otherwise keep regular
+            if (i != 0 && i != this.lanes) { context.setLineDash([20, 20]); } 
+            else { context.setLineDash([]); }
+
             const x_val = lerp(this.left, this.right, i / this.lanes);
 
             // Draw the lanes of the road
@@ -29,6 +34,10 @@ class Road {
             context.stroke();
         }
         
+    }
 
+    getLaneCenter(laneIdx) {
+        const lineWidth = this.width / this.lanes;
+        return this.left + (lineWidth / 2) + (laneIdx * lineWidth);
     }
 }
