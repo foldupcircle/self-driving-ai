@@ -13,8 +13,9 @@ const road = new Road(canvas.width / 2, canvas.width * 0.9);
 const generatedCars = 200;
 const cars = generateCars(generatedCars);
 
-const damagedThreshold = 0.4; // [0, 1]
+// const damagedThreshold = 0.4; // [0, 1]
 let play = true;
+let bestCarOverall = cars[0];
 let optimalCar = cars[0];
 if (localStorage.getItem("bestCar")) {
     for (let i = 0; i < cars.length; i++) {
@@ -36,7 +37,9 @@ const carTraffic = [
 animate();
 
 function saveBestCar() {
-    localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
+    if (score(optimalCar, carTraffic) > score(bestCarOverall, carTraffic)) {
+        localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
+    }
 }
 
 function deleteBestCar() {
@@ -88,10 +91,10 @@ function animate(time) {
     for (let i = 0; i < cars.length; i++) {
         if (cars[i].damaged) { damagedCars++; }
     }
-    if (optimalCar.damaged && (damagedCars * 1.0 / generatedCars) >= damagedThreshold) {
-        saveBestCar();
-        location.reload(true);
-    }
+    // if (optimalCar.damaged && (damagedCars * 1.0 / generatedCars) >= damagedThreshold) {
+    //     saveBestCar();
+    //     location.reload(true);
+    // }
 
     context.restore();
 

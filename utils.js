@@ -47,3 +47,11 @@ function getRGBA(value){
     const B=value>0?0:255;
     return "rgba("+R+","+G+","+B+","+alpha+")";
 }
+
+function score(car, traffic) {
+    let score = 0;
+    for (let i = 0; i < traffic.length; i++) {
+        if (traffic[i].y > car.y) { score++; }
+    }
+    return score;
+}
