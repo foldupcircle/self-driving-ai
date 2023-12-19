@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <head>
-    <title>Self-Driving Car (No Libraries)</title>
+    <title>Self-Driving Car AI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <canvas id="myCanvas"></canvas>
+    <div id="verticalButtons">
+        <button onclick="saveBestCar()">💾</button>
+        <button onclick="deleteBestCar()">🗑️</button>
+    </div>
+    <canvas id="netCanvas"></canvas>
+    <script src="visualizer.js"></script>
+    <script src="neuralnet.js"></script>
+    <script src="sensors.js"></script>
+    <script src="utils.js"></script>
+    <script src="road.js"></script>
     <script src="controls.js"></script>
     <script src="car.js"></script>
     <script src="main.js"></script>
