@@ -8,3 +8,7 @@ body {
 #myCanvas {
     background: lightgray;
 }
+
+#netCanvas {
+    background: black;
+}
