@@ -104,8 +104,6 @@ class Car {
             const offsets = this.sensors.sensorReadings.map(s => s == null ? 0 : (1 - s.offset));
             const finalOutputs = NeuralNet.forwardProp(offsets, this.brain);
             
-            console.log(finalOutputs);
-
             // Settings outputs to the controls so AI can actually control the car
             if (this.brainAvail) {
                 this.controls.forward = finalOutputs[0];

@@ -10,8 +10,11 @@ const context = canvas.getContext("2d");
 const netContext = netCanvas.getContext("2d");
 
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
-const cars = generateCars(1);
-let play = false;
+const generatedCars = 200;
+const cars = generateCars(generatedCars);
+
+const damagedThreshold = 0.4; // [0, 1]
+let play = true;
 let optimalCar = cars[0];
 if (localStorage.getItem("bestCar")) {
     for (let i = 0; i < cars.length; i++) {
@@ -21,13 +24,13 @@ if (localStorage.getItem("bestCar")) {
 }
 
 const carTraffic = [
-    new Car(road.getLaneCenter(1), -100, 30, 50),
-    new Car(road.getLaneCenter(0), -300, 30, 50),
-    new Car(road.getLaneCenter(2), -300, 30, 50),
-    new Car(road.getLaneCenter(0), -500, 30, 50),
-    new Car(road.getLaneCenter(1), -500, 30, 50),
-    new Car(road.getLaneCenter(1), -700, 30, 50),
-    new Car(road.getLaneCenter(2), -700, 30, 50)
+    new Car(road.getLaneCenter(1), -100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -700, 30, 50, "TRAFFIC", 0)
 ]
 
 animate();
@@ -38,6 +41,7 @@ function saveBestCar() {
 
 function deleteBestCar() {
     localStorage.removeItem("bestCar");
+    location.reload(true);
 }
 
 function start() { 
@@ -80,7 +84,15 @@ function animate(time) {
     context.globalAlpha = 1;
     optimalCar.draw(context, "blue", true);
     
-    
+    let damagedCars = 0;
+    for (let i = 0; i < cars.length; i++) {
+        if (cars[i].damaged) { damagedCars++; }
+    }
+    if (optimalCar.damaged && (damagedCars * 1.0 / generatedCars) >= damagedThreshold) {
+        saveBestCar();
+        location.reload(true);
+    }
+
     context.restore();
 
     netContext.lineDashOffset = -time / 50;
