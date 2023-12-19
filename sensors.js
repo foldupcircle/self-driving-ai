@@ -9,7 +9,7 @@ class Sensors {
         this.sensorReadings = [];
     }
 
-    update(borders) {
+    update(borders, carTraffic) {
 
         ////////// CAST RAYS CODE //////////
 
@@ -30,19 +30,26 @@ class Sensors {
 
         this.sensorReadings = [];
         for (let i = 0; i < this.rays.length; i++) {
-            this.sensorReadings.push(this.#getReading(this.rays[i], borders));
+            this.sensorReadings.push(this.#getReading(this.rays[i], borders, carTraffic));
         }
 
         ////////// SENSOR READINGS CODE - END //////////
 
     }
 
-    #getReading(ray, borders) {
+    #getReading(ray, borders, carTraffic) {
         let values = [];
-
         for (let i = 0; i < borders.length; i++) {
             const val = getIntersection(ray[0], ray[1], borders[i][0], borders[i][1]);
             if (val) { values.push(val); }
+        }
+
+        for (let i = 0; i < carTraffic.length; i++) {
+            const trafficCar = carTraffic[i].polygon;
+            for (let j = 0; j < trafficCar.length; j++) {
+                const val = getIntersection(ray[0], ray[1], trafficCar[j], trafficCar[(j + 1) % trafficCar.length]);
+                if (val) { values.push(val); }
+            }
         }
 
         if (values.length == 0) { return null; }

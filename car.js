@@ -1,26 +1,27 @@
 class Car {
 
-    constructor(x, y, width, height) {
+    constructor(x, y, width, height, carType="TRAFFIC", maxSpeed=3) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.controls = new Controls();
+        this.controls = new Controls(carType);
         this.speed = 0;
         this.acceleration = 1;
-        this.max_speed = 5;
+        this.max_speed = maxSpeed;
         this.friction = 0.2;
         this.angle = 0;
-        this.sensors = new Sensors(this);
+        if (carType != "TRAFFIC") { this.sensors = new Sensors(this); }
         this.polygon = [];
         this.damaged = false;
+        
     }
 
-    draw(context) {
+    draw(context, color) {
 
         // Adusting color for car based on collision (damaged or not)
         if (this.damaged) { context.fillStyle = "gray"; }
-        else { context.fillStyle = "black"; }
+        else { context.fillStyle = color; }
 
         context.beginPath();
         if (this.polygon.length > 0) {
@@ -33,10 +34,10 @@ class Car {
         }
         
         // Draw Sensor Rays
-        this.sensors.draw(context);
+        if (this.sensors) { this.sensors.draw(context); }
     }
 
-    update(borders) {
+    update(borders, carTraffic=[]) {
 
         if (!this.damaged) {
 
@@ -71,11 +72,19 @@ class Car {
             this.polygon = this.#createPolygon();
 
             ////////// ASSESS DAMAGE //////////
-            
+
             for (let i = 0; i < borders.length; i++) {
                 if (polyIntersect(this.polygon, borders[i])) { 
                     this.damaged = true;
-                    
+                    break;
+                } else {
+                    this.damaged = false;
+                }
+            } 
+
+            for (let i = 0; i < carTraffic.length; i++) {
+                if (polyIntersect(this.polygon, carTraffic[i].polygon)) { 
+                    this.damaged = true;
                     break;
                 } else {
                     this.damaged = false;
@@ -85,7 +94,7 @@ class Car {
 
         ////////// UPDATE SENSORS //////////
 
-        this.sensors.update(borders);
+        if (this.sensors) { this.sensors.update(borders, carTraffic); }
 
     }
 
