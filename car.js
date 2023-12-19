@@ -81,15 +81,16 @@ class Car {
                     this.damaged = false;
                 }
             } 
-
-            for (let i = 0; i < carTraffic.length; i++) {
-                if (polyIntersect(this.polygon, carTraffic[i].polygon)) { 
-                    this.damaged = true;
-                    break;
-                } else {
-                    this.damaged = false;
-                }
-            } 
+            if (!this.damaged) {
+                for (let i = 0; i < carTraffic.length; i++) {
+                    if (polyIntersect(this.polygon, carTraffic[i].polygon)) { 
+                        this.damaged = true;
+                        break;
+                    } else {
+                        this.damaged = false;
+                    }
+                } 
+            }
         }
 
         ////////// UPDATE SENSORS //////////
