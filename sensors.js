@@ -29,16 +29,47 @@ class Sensors {
         ////////// SENSOR READINGS CODE //////////
 
         this.sensorReadings = [];
-        
+        for (let i = 0; i < this.rays.length; i++) {
+            this.sensorReadings.push(this.#getReading(this.rays[i], borders));
+        }
+
+    }
+
+    #getReading(ray, borders) {
+        let values = [];
+
+        for (let i = 0; i < borders.length; i++) {
+            const val = getIntersection(ray[0], ray[1], borders[i][0], borders[i][1]);
+            if (val) { values.push(val); }
+        }
+
+        if (values.length == 0) { return null; }
+        else {
+            const offsets = values.map(o => o.offset);
+            const minOffset = Math.min(...offsets);
+            return values.find(o => o.offset == minOffset);
+        }
     }
 
     draw(context) {
         for (let i = 0; i < this.rays.length; i++) {
+            let end = this.rays[i][1];
+            if (this.sensorReadings[i]) { end = this.sensorReadings[i]; }
+
+            // Yellow Lines for valid sensor reading space
             context.beginPath();
             context.lineWidth = 2;
             context.strokeStyle = "yellow";
             context.moveTo(this.rays[i][0].x, this.rays[i][0].y);
-            context.lineTo(this.rays[i][1].x, this.rays[i][1].y);
+            context.lineTo(end.x, end.y);
+            context.stroke();
+
+            // Intersection to end of where the reading could have reached out to
+            context.beginPath();
+            context.lineWidth = 2;
+            context.strokeStyle = "black";
+            context.moveTo(this.rays[i][1].x, this.rays[i][1].y);
+            context.lineTo(end.x, end.y);
             context.stroke();
         }
     }
