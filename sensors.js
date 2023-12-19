@@ -33,6 +33,8 @@ class Sensors {
             this.sensorReadings.push(this.#getReading(this.rays[i], borders));
         }
 
+        ////////// SENSOR READINGS CODE - END //////////
+
     }
 
     #getReading(ray, borders) {

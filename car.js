@@ -12,64 +12,106 @@ class Car {
         this.friction = 0.2;
         this.angle = 0;
         this.sensors = new Sensors(this);
+        this.polygon = [];
+        this.damaged = false;
     }
 
     draw(context) {
-        context.save();
-        context.translate(this.x, this.y);
-        context.rotate(-this.angle);
+
+        // Adusting color for car based on collision (damaged or not)
+        if (this.damaged) { context.fillStyle = "gray"; }
+        else { context.fillStyle = "black"; }
+
         context.beginPath();
+        if (this.polygon.length > 0) {
+            context.moveTo(this.polygon[0].x, this.polygon[0].y);
 
-        context.rect(
-            -this.width/2,
-            -this.height/2,
-            this.width,
-            this.height
-        );
+            for (let i = 1; i < this.polygon.length; i++) {
+                context.lineTo(this.polygon[i].x, this.polygon[i].y);
+            }
+            context.fill();
+        }
         
-        context.fill();
-        context.restore();
-
         // Draw Sensor Rays
         this.sensors.draw(context);
     }
 
     update(borders) {
 
-        ////////// CAR MOVEMENT CODE //////////
+        if (!this.damaged) {
 
-        // Keyboard control updates
-        if (this.controls.forward) { this.speed += this.acceleration; }
-        if (this.controls.reverse) { this.speed -= this.acceleration; }
+            ////////// CAR MOVEMENT CODE //////////
 
-        // Max Speed Constraints
-        if (this.speed > this.max_speed) { this.speed = this.max_speed; }
-        if (this.speed < -this.max_speed/2) { this.speed = -this.max_speed/2; }
+            // Keyboard control updates
+            if (this.controls.forward) { this.speed += this.acceleration; }
+            if (this.controls.reverse) { this.speed -= this.acceleration; }
 
-        // Friction
-        if (this.speed > 0) { this.speed -= this.friction; }
-        if (this.speed < 0) { this.speed += this.friction; }
+            // Max Speed Constraints
+            if (this.speed > this.max_speed) { this.speed = this.max_speed; }
+            if (this.speed < -this.max_speed/2) { this.speed = -this.max_speed/2; }
 
-        // Edge Case for when the Car stops
-        if (Math.abs(this.speed) < this.friction) { this.speed = 0; }
+            // Friction
+            if (this.speed > 0) { this.speed -= this.friction; }
+            if (this.speed < 0) { this.speed += this.friction; }
 
-        // Angle Movement
-        const reverse = this.speed >= 0 ? 1 : -1;
-        if (this.controls.left) { this.angle += 0.03 * reverse; }
-        if (this.controls.right) { this.angle -= 0.03 * reverse; }
+            // Edge Case for when the Car stops
+            if (Math.abs(this.speed) < this.friction) { this.speed = 0; }
 
-        // Position Update Based on Unit Circle
-        this.y -= Math.cos(this.angle) * this.speed;
-        this.x -= Math.sin(this.angle) * this.speed;
+            // Angle Movement
+            const reverse = this.speed >= 0 ? 1 : -1;
+            if (this.controls.left) { this.angle += 0.03 * reverse; }
+            if (this.controls.right) { this.angle -= 0.03 * reverse; }
 
-        ////////// CAR MOVEMENT CODE - END //////////
+            // Position Update Based on Unit Circle
+            this.y -= Math.cos(this.angle) * this.speed;
+            this.x -= Math.sin(this.angle) * this.speed;
+
+            ////////// GET CORNERS //////////
+
+            this.polygon = this.#createPolygon();
+
+            ////////// ASSESS DAMAGE //////////
+            
+            for (let i = 0; i < borders.length; i++) {
+                if (polyIntersect(this.polygon, borders[i])) { 
+                    this.damaged = true;
+                    
+                    break;
+                } else {
+                    this.damaged = false;
+                }
+            } 
+        }
 
         ////////// UPDATE SENSORS //////////
 
         this.sensors.update(borders);
 
-        ////////// UPDATE SENSORS - END //////////
+    }
 
-        
+    #createPolygon() {
+
+        const pts = [];
+        const cornerLength = Math.hypot(this.width / 2, this.height / 2);
+        const alpha = Math.atan2(this.width, this.height);
+
+        pts.push({
+            x: this.x - Math.sin(this.angle - alpha) * cornerLength,
+            y: this.y - Math.cos(this.angle - alpha) * cornerLength
+        });
+        pts.push({
+            x: this.x - Math.sin(this.angle + alpha) * cornerLength,
+            y: this.y - Math.cos(this.angle + alpha) * cornerLength
+        });
+        pts.push({
+            x: this.x - Math.sin(Math.PI + this.angle - alpha) * cornerLength,
+            y: this.y - Math.cos(Math.PI + this.angle - alpha) * cornerLength
+        });
+        pts.push({
+            x: this.x - Math.sin(Math.PI + this.angle + alpha) * cornerLength,
+            y: this.y - Math.cos(Math.PI + this.angle + alpha) * cornerLength
+        });
+
+        return pts;
     }
 }
