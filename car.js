@@ -11,9 +11,12 @@ class Car {
         this.max_speed = maxSpeed;
         this.friction = 0.2;
         this.angle = 0;
-        if (carType != "TRAFFIC") { this.sensors = new Sensors(this); }
         this.polygon = [];
         this.damaged = false;
+        if (carType != "TRAFFIC") { 
+            this.sensors = new Sensors(this); 
+            this.brain = new NeuralNet([this.sensors.rayCount, 6, 4]);
+        }
         
     }
 
@@ -95,7 +98,10 @@ class Car {
 
         ////////// UPDATE SENSORS //////////
 
-        if (this.sensors) { this.sensors.update(borders, carTraffic); }
+        if (this.sensors) { 
+            this.sensors.update(borders, carTraffic); 
+            this.sensors.sensorReadings
+        }
 
     }
 
