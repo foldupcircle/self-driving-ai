@@ -24,16 +24,12 @@ class Sensors {
             this.rays.push([rayStart, rayEnd]);
         }
 
-        ////////// CAST RAYS CODE - END //////////
-
         ////////// SENSOR READINGS CODE //////////
 
         this.sensorReadings = [];
         for (let i = 0; i < this.rays.length; i++) {
             this.sensorReadings.push(this.#getReading(this.rays[i], borders, carTraffic));
         }
-
-        ////////// SENSOR READINGS CODE - END //////////
 
     }
 

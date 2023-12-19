@@ -13,6 +13,7 @@ class Car {
         this.angle = 0;
         this.polygon = [];
         this.damaged = false;
+        this.brainAvail = (carType == 'AI');
         if (carType != "TRAFFIC") { 
             this.sensors = new Sensors(this); 
             this.brain = new NeuralNet([this.sensors.rayCount, 6, 4]);
@@ -100,7 +101,18 @@ class Car {
 
         if (this.sensors) { 
             this.sensors.update(borders, carTraffic); 
-            this.sensors.sensorReadings
+            const offsets = this.sensors.sensorReadings.map(s => s == null ? 0 : (1 - s.offset));
+            const finalOutputs = NeuralNet.forwardProp(offsets, this.brain);
+            
+            console.log(finalOutputs);
+            
+            // Settings outputs to the controls so AI can actually control the car
+            if (this.brainAvail) {
+                this.controls.forward = finalOutputs[0];
+                this.controls.left = finalOutputs[1];
+                this.controls.right = finalOutputs[2];
+                this.controls.reverse = finalOutputs[3];
+            }
         }
 
     }
