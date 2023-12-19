@@ -15,6 +15,19 @@ class NeuralNet {
 
         return outputs;
     }
+
+    static mutate(net, amount=1) {
+        net.levels.forEach(lvl => {
+            for (let i = 0; i < lvl.biases.length; i++) {
+                lvl.biases[i] = lerp(lvl.biases[i], ((Math.random() * 2) - 1), amount);
+            }
+            for (let i = 0; i < lvl.weights.length; i++) {
+                for (let j = 0; j < lvl.weights.length; j++) {
+                    lvl.weights[i][j] = lerp(lvl.weights[i][j], ((Math.random() * 2) - 1), amount);
+                }
+            }
+        });
+    }
 }
 
 class Level {
@@ -53,7 +66,7 @@ class Level {
             lvl.inputs[i] = setInputs[i];
         }
 
-        // 
+        // Set weights
         for (let i = 0; i < lvl.outputs.length; i++) {
             let weightedSum = 0;
             for (let j = 0; j < lvl.inputs.length; j++) {

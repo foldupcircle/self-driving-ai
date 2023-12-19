@@ -13,7 +13,7 @@ class Car {
         this.angle = 0;
         this.polygon = [];
         this.damaged = false;
-        this.brainAvail = (carType == 'AI');
+        this.brainAvail = (carType == "AI");
         if (carType != "TRAFFIC") { 
             this.sensors = new Sensors(this); 
             this.brain = new NeuralNet([this.sensors.rayCount, 6, 4]);
@@ -21,7 +21,7 @@ class Car {
         
     }
 
-    draw(context, color) {
+    draw(context, color, drawSensor=false) {
 
         // Adusting color for car based on collision (damaged or not)
         if (this.damaged) { context.fillStyle = "gray"; }
@@ -38,7 +38,7 @@ class Car {
         }
         
         // Draw Sensor Rays
-        if (this.sensors) { this.sensors.draw(context); }
+        if (this.sensors && drawSensor) { this.sensors.draw(context); }
     }
 
     update(borders, carTraffic=[]) {
@@ -105,7 +105,7 @@ class Car {
             const finalOutputs = NeuralNet.forwardProp(offsets, this.brain);
             
             console.log(finalOutputs);
-            
+
             // Settings outputs to the controls so AI can actually control the car
             if (this.brainAvail) {
                 this.controls.forward = finalOutputs[0];
