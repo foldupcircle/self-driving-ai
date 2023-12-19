@@ -11,13 +11,13 @@ const netContext = netCanvas.getContext("2d");
 
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
 const cars = generateCars(1);
+let play = false;
 let optimalCar = cars[0];
 if (localStorage.getItem("bestCar")) {
     for (let i = 0; i < cars.length; i++) {
         cars[i].brain = JSON.parse(localStorage.getItem("bestCar"));
         if (i != 0) { NeuralNet.mutate(cars[i].brain, 0.2); }
     }
-    
 }
 
 const carTraffic = [
@@ -39,6 +39,13 @@ function saveBestCar() {
 function deleteBestCar() {
     localStorage.removeItem("bestCar");
 }
+
+function start() { 
+    play = true; 
+    animate();
+}
+
+function pause() { play = false; }
 
 function generateCars(n) {
     const cars = [];
@@ -78,5 +85,7 @@ function animate(time) {
 
     netContext.lineDashOffset = -time / 50;
     Visualizer.drawNetwork(netContext, optimalCar.brain);
-    requestAnimationFrame(animate);
+    if (play) {
+        requestAnimationFrame(animate);
+    }
 }
