@@ -14,6 +14,8 @@ class Car {
         this.polygon = [];
         this.damaged = false;
         this.brainAvail = (carType == "AI");
+        this.carProgressLives = 100;
+        this.lastY = this.y + 1;
         if (carType != "TRAFFIC") { 
             this.sensors = new Sensors(this); 
             this.brain = new NeuralNet([this.sensors.rayCount, 6, 4]);
@@ -68,6 +70,7 @@ class Car {
             if (this.controls.right) { this.angle -= 0.03 * reverse; }
 
             // Position Update Based on Unit Circle
+            this.lastY = this.y;
             this.y -= Math.cos(this.angle) * this.speed;
             this.x -= Math.sin(this.angle) * this.speed;
 
@@ -85,6 +88,9 @@ class Car {
                     this.damaged = false;
                 }
             } 
+            if (!this.damaged && this.carProgressLives <= 0) {
+                this.damaged = true;
+            }
             if (!this.damaged) {
                 for (let i = 0; i < carTraffic.length; i++) {
                     if (polyIntersect(this.polygon, carTraffic[i].polygon)) { 
@@ -104,8 +110,6 @@ class Car {
             const offsets = this.sensors.sensorReadings.map(s => s == null ? 0 : (1 - s.offset));
             const finalOutputs = NeuralNet.forwardProp(offsets, this.brain);
             
-            console.log(finalOutputs);
-
             // Settings outputs to the controls so AI can actually control the car
             if (this.brainAvail) {
                 this.controls.forward = finalOutputs[0];

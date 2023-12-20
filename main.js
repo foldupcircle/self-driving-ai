@@ -10,40 +10,67 @@ const context = canvas.getContext("2d");
 const netContext = netCanvas.getContext("2d");
 
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
-const cars = generateCars(1);
+const generatedCars = 200;
+const cars = generateCars(generatedCars);
+
+const damagedDistanceThreshold = 100.0; // Must be a float
+let play = true;
+// let bestBrainOverall = null;
 let optimalCar = cars[0];
+let bestScore = 0;
+console.log(optimalCar.lastY);
+if (localStorage.getItem("bestScore")) {
+    bestScore = JSON.parse(localStorage.getItem("bestScore"));
+}
 if (localStorage.getItem("bestCar")) {
+    // bestBrainOverall = JSON.parse(localStorage.getItem("bestCar"));
+    console.log("MUTATE");
     for (let i = 0; i < cars.length; i++) {
         cars[i].brain = JSON.parse(localStorage.getItem("bestCar"));
         if (i != 0) { NeuralNet.mutate(cars[i].brain, 0.2); }
     }
-    
 }
 
 const carTraffic = [
-    new Car(road.getLaneCenter(1), -100, 30, 50),
-    new Car(road.getLaneCenter(0), -300, 30, 50),
-    new Car(road.getLaneCenter(2), -300, 30, 50),
-    new Car(road.getLaneCenter(0), -500, 30, 50),
-    new Car(road.getLaneCenter(1), -500, 30, 50),
-    new Car(road.getLaneCenter(1), -700, 30, 50),
-    new Car(road.getLaneCenter(2), -700, 30, 50)
+    new Car(road.getLaneCenter(1), -100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -700, 30, 50, "TRAFFIC", 0)
 ]
 
 animate();
 
 function saveBestCar() {
-    localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
+    const optimalCarScore = score(optimalCar, carTraffic);
+    if (optimalCarScore > bestScore) {
+        localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
+        localStorage.setItem("bestScore", JSON.stringify(optimalCarScore));
+        // bestBrainOverall = optimalCar.brain;
+    }
+    location.reload();
 }
 
 function deleteBestCar() {
     localStorage.removeItem("bestCar");
+    location.reload();
+}
+
+function startPause() { 
+    if (!play) {
+        play = true; 
+        animate();
+    } else {
+        play = false;
+    }
 }
 
 function generateCars(n) {
     const cars = [];
     for (let i = 1; i <= n; i++) {
-        cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 5));
+        cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 3));
     }
     return cars;
 }
@@ -73,10 +100,25 @@ function animate(time) {
     context.globalAlpha = 1;
     optimalCar.draw(context, "blue", true);
     
-    
+    let notDamagedCarsWithinThreshold = false;
+    for (let i = 0; i < cars.length; i++) {
+        if (!cars[i].damaged && totalDistance(optimalCar.x, optimalCar.y, cars[i].x, cars[i].y) <= damagedDistanceThreshold) { 
+            notDamagedCarsWithinThreshold = true; 
+            if (cars[i].lastY <= cars[i].y) {
+                cars[i].carProgressLives--;
+            }
+        }
+    }
+
+    if (optimalCar.damaged && !notDamagedCarsWithinThreshold) {
+        saveBestCar();
+    }
+
     context.restore();
 
     netContext.lineDashOffset = -time / 50;
     Visualizer.drawNetwork(netContext, optimalCar.brain);
-    requestAnimationFrame(animate);
+    if (play) {
+        requestAnimationFrame(animate);
+    }
 }
