@@ -50,10 +50,14 @@ function getRGBA(value){
 
 function score(car, traffic) {
     let score = 0;
-    for (let i = 0; i < traffic.length; i++) {
-        if (traffic[i].y > car.y) { score += 100; }
-    }
+    // for (let i = 0; i < traffic.length; i++) {
+    //     if (traffic[i].y > car.y) { score += 100; }
+    // }
     score += Math.floor(- (car.y - 100.0));
+    /*const offsets = car.sensors.sensorReadings.map(s => s == null ? 0 : (1 - s.offset));
+    for (let i = 0; i < offsets.length; i++) {
+        score += offsets[i];
+    }*/
     
     return score;
 }

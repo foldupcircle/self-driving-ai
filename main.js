@@ -10,12 +10,11 @@ const context = canvas.getContext("2d");
 const netContext = netCanvas.getContext("2d");
 
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
-const generatedCars = 2000;
+const generatedCars = 500;
 const cars = generateCars(generatedCars);
 
 const damagedDistanceThreshold = 100.0; // Must be a float
 let play = true;
-// let bestBrainOverall = null;
 let optimalCar = cars[0];
 let bestScore = 0;
 if (localStorage.getItem("bestScore")) {
@@ -23,11 +22,10 @@ if (localStorage.getItem("bestScore")) {
     console.log(bestScore);
 }
 if (localStorage.getItem("bestCar")) {
-    // bestBrainOverall = JSON.parse(localStorage.getItem("bestCar"));
     console.log("MUTATE");
     for (let i = 0; i < cars.length; i++) {
         cars[i].brain = JSON.parse(localStorage.getItem("bestCar"));
-        if (i != 0) { NeuralNet.mutate(cars[i].brain, 0.15); }
+        if (i != 0) { NeuralNet.mutate(cars[i].brain, 0.2); }
     }
 }
 
@@ -48,13 +46,11 @@ function saveBestCar() {
     if (optimalCarScore >= bestScore) {
         localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
         localStorage.setItem("bestScore", JSON.stringify(optimalCarScore));
-        // bestBrainOverall = optimalCar.brain;
     }
     location.reload();
 }
 
 function deleteBestCar() {
-    console.log("HAHHH");
     localStorage.removeItem("bestCar");
     localStorage.removeItem("bestScore");
     location.reload();
