@@ -51,7 +51,12 @@ function getRGBA(value){
 function score(car, traffic) {
     let score = 0;
     for (let i = 0; i < traffic.length; i++) {
-        if (traffic[i].y > car.y) { score++; }
+        if (traffic[i].y > car.y) { score += 100; }
     }
+    score += Math.floor(-car.y);
     return score;
+}
+
+function totalDistance(x1, y1, x2, y2) {
+    return Math.sqrt( ((x2 - x1) ** 2) + ((y2 - y1) ** 2) );
 }

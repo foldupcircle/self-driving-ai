@@ -14,6 +14,7 @@ class Car {
         this.polygon = [];
         this.damaged = false;
         this.brainAvail = (carType == "AI");
+        this.carProgressLives = 100;
         if (carType != "TRAFFIC") { 
             this.sensors = new Sensors(this); 
             this.brain = new NeuralNet([this.sensors.rayCount, 6, 4]);
@@ -85,6 +86,9 @@ class Car {
                     this.damaged = false;
                 }
             } 
+            if (!this.damaged && this.carProgressLives <= 0) {
+                this.damaged = true;
+            }
             if (!this.damaged) {
                 for (let i = 0; i < carTraffic.length; i++) {
                     if (polyIntersect(this.polygon, carTraffic[i].polygon)) { 
