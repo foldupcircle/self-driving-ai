@@ -23,7 +23,7 @@ if (localStorage.getItem("bestScore")) {
 if (localStorage.getItem("bestCar")) {
     for (let i = 0; i < cars.length; i++) {
         cars[i].brain = JSON.parse(localStorage.getItem("bestCar"));
-        if (i != 0) { NeuralNet.mutate(cars[i].brain, 0.1); }
+        if (i != 0) { NeuralNet.mutate(cars[i].brain, 0.2); }
     }
 }
 
