@@ -15,15 +15,14 @@ const cars = generateCars(generatedCars);
 
 const damagedDistanceThreshold = 100.0; // Must be a float
 let play = true;
-// let bestBrainOverall = null;
 let optimalCar = cars[0];
 let bestScore = 0;
 console.log(optimalCar.lastY);
 if (localStorage.getItem("bestScore")) {
     bestScore = JSON.parse(localStorage.getItem("bestScore"));
 }
+console.log(localStorage.getItem("bestCar"));
 if (localStorage.getItem("bestCar")) {
-    // bestBrainOverall = JSON.parse(localStorage.getItem("bestCar"));
     console.log("MUTATE");
     for (let i = 0; i < cars.length; i++) {
         cars[i].brain = JSON.parse(localStorage.getItem("bestCar"));
@@ -46,10 +45,11 @@ animate();
 function saveBestCar() {
     const optimalCarScore = score(optimalCar, carTraffic);
     if (optimalCarScore > bestScore) {
+        console.log("saveBestCar");
         localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
         localStorage.setItem("bestScore", JSON.stringify(optimalCarScore));
-        // bestBrainOverall = optimalCar.brain;
     }
+    // if (!optimalCar.finished) { location.reload(); }
     location.reload();
 }
 
@@ -109,8 +109,8 @@ function animate(time) {
             }
         }
     }
-
-    if (optimalCar.damaged && !notDamagedCarsWithinThreshold) {
+    //  || optimalCar.finished
+    if ((optimalCar.damaged && !notDamagedCarsWithinThreshold)) {
         saveBestCar();
     }
 

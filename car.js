@@ -16,6 +16,7 @@ class Car {
         this.brainAvail = (carType == "AI");
         this.carProgressLives = 100;
         this.lastY = this.y + 1;
+        // this.finished = false;
         if (carType != "TRAFFIC") { 
             this.sensors = new Sensors(this); 
             this.brain = new NeuralNet([this.sensors.rayCount, 6, 4]);
@@ -29,6 +30,7 @@ class Car {
         if (this.damaged) { context.fillStyle = "gray"; }
         else { context.fillStyle = color; }
 
+        // Draw car rectangle
         context.beginPath();
         if (this.polygon.length > 0) {
             context.moveTo(this.polygon[0].x, this.polygon[0].y);
@@ -74,7 +76,7 @@ class Car {
             this.y -= Math.cos(this.angle) * this.speed;
             this.x -= Math.sin(this.angle) * this.speed;
 
-            ////////// GET CORNERS //////////
+            ////////// GET CAR RECTANGLE CORNERS //////////
 
             this.polygon = this.#createPolygon();
 
@@ -101,6 +103,13 @@ class Car {
                     }
                 } 
             }
+
+            ////////// FINISHED? //////////
+            // if (finishLine && polyIntersect(this.polygon, finishLine)) { 
+            //     console.log("hello");
+            //     this.finished = true; 
+            // }
+
         }
 
         ////////// UPDATE SENSORS //////////

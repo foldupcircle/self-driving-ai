@@ -33,8 +33,7 @@ function polyIntersect(poly1, poly2) {
                 poly2[j], 
                 (poly2[(j + 1) % poly2.length])
             );
-            if (intersect) { 
-                return true; }
+            if (intersect) { return true; }
         }
     }
     return false;
