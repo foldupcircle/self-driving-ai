@@ -54,6 +54,7 @@ function score(car, traffic) {
         if (traffic[i].y > car.y) { score += 100; }
     }
     score += Math.floor(- (car.y - 100.0));
+    
     return score;
 }
 
