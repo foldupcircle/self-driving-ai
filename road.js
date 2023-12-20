@@ -18,6 +18,8 @@ class Road {
             [{x: this.left, y: this.top}, {x: this.left, y: this.bottom}], // TopLeft to BottomLeft
             [{x: this.right, y: this.top}, {x: this.right, y: this.bottom}] // TopRight to BottomRight
         ];
+
+        this.finishLine = [{x: this.left, y: -4100}, {x: this.right, y: -4100}];
     }
 
     draw(context) {
@@ -46,6 +48,15 @@ class Road {
             context.lineTo(elem[1].x, elem[1].y);
             context.stroke();
         });
+
+        // Finish Line
+        context.lineWidth = 15;
+        context.strokeStyle = 'black';
+
+        context.beginPath();
+        context.moveTo(this.finishLine[0].x, this.finishLine[0].y);
+        context.lineTo(this.finishLine[1].x, this.finishLine[1].y);
+        context.stroke();
         
     }
 

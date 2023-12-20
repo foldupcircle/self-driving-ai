@@ -10,7 +10,7 @@ const context = canvas.getContext("2d");
 const netContext = netCanvas.getContext("2d");
 
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
-const generatedCars = 500;
+const generatedCars = 700;
 const cars = generateCars(generatedCars);
 
 const damagedDistanceThreshold = 100.0; // Must be a float
@@ -19,13 +19,11 @@ let optimalCar = cars[0];
 let bestScore = 0;
 if (localStorage.getItem("bestScore")) {
     bestScore = JSON.parse(localStorage.getItem("bestScore"));
-    console.log(bestScore);
 }
 if (localStorage.getItem("bestCar")) {
-    console.log("MUTATE");
     for (let i = 0; i < cars.length; i++) {
         cars[i].brain = JSON.parse(localStorage.getItem("bestCar"));
-        if (i != 0) { NeuralNet.mutate(cars[i].brain, 0.2); }
+        if (i != 0) { NeuralNet.mutate(cars[i].brain, 0.1); }
     }
 }
 
@@ -36,7 +34,30 @@ const carTraffic = [
     new Car(road.getLaneCenter(0), -500, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -500, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -700, 30, 50, "TRAFFIC", 0)
+    new Car(road.getLaneCenter(2), -700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -1100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -1300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -1300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -1700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -1900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -2100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -2300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -2700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -2900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -3100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -3300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -3700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -3900, 30, 50, "TRAFFIC", 0)
 ]
 
 animate();
@@ -47,7 +68,8 @@ function saveBestCar() {
         localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
         localStorage.setItem("bestScore", JSON.stringify(optimalCarScore));
     }
-    location.reload();
+    if (!optimalCar.finished) { location.reload(); }
+    else { play = false; }
 }
 
 function deleteBestCar() {
@@ -78,7 +100,7 @@ function animate(time) {
         carTraffic[i].update(road.borders);
     }
     for (let i = 0; i < cars.length; i++) {
-        cars[i].update(road.borders, carTraffic);
+        cars[i].update(road.borders, road.finishLine, carTraffic);
     }
     optimalCar = cars.find(c => c.y == (Math.min(...cars.map(c => c.y))) );
 
@@ -108,7 +130,7 @@ function animate(time) {
         }
     }
 
-    if (optimalCar.damaged && !notDamagedCarsWithinThreshold) {
+    if ((optimalCar.damaged && !notDamagedCarsWithinThreshold) || optimalCar.finished) {
         saveBestCar();
     }
 

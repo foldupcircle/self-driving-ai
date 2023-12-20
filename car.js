@@ -16,6 +16,7 @@ class Car {
         this.brainAvail = (carType == "AI");
         this.carProgressLives = 100;
         this.lastY = this.y + 1;
+        this.finished = false;
         if (carType != "TRAFFIC") { 
             this.sensors = new Sensors(this); 
             this.brain = new NeuralNet([this.sensors.rayCount, 6, 4]);
@@ -43,9 +44,9 @@ class Car {
         if (this.sensors && drawSensor) { this.sensors.draw(context); }
     }
 
-    update(borders, carTraffic=[]) {
+    update(borders, finishLine=null, carTraffic=[]) {
 
-        if (!this.damaged) {
+        if (!this.damaged && !this.finished) {
 
             ////////// CAR MOVEMENT CODE //////////
 
@@ -100,6 +101,13 @@ class Car {
                         this.damaged = false;
                     }
                 } 
+            }
+
+            ////////// FINISHED? //////////
+            
+            if (finishLine && polyIntersect(this.polygon, finishLine)) { 
+                console.log("hello");
+                this.finished = true; 
             }
         }
 
