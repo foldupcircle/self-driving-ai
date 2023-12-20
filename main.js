@@ -36,7 +36,30 @@ const carTraffic = [
     new Car(road.getLaneCenter(0), -500, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -500, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -700, 30, 50, "TRAFFIC", 0)
+    new Car(road.getLaneCenter(0), -700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -1100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -1300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -1300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -1500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -1900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -1900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -2100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -2300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -2700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -2700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -3100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -3300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -3700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -3900, 30, 50, "TRAFFIC", 0)
 ]
 
 animate();
