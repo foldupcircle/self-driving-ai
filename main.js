@@ -13,11 +13,18 @@ const road = new Road(canvas.width / 2, canvas.width * 0.9);
 const generatedCars = 200;
 const cars = generateCars(generatedCars);
 
-const damagedDistanceThreshold = 50.0; // Must be a float
+const damagedDistanceThreshold = 100.0; // Must be a float
 let play = true;
-let bestCarOverall = cars[0];
+// let bestBrainOverall = null;
 let optimalCar = cars[0];
+let bestScore = 0;
+console.log(optimalCar.lastY);
+if (localStorage.getItem("bestScore")) {
+    bestScore = JSON.parse(localStorage.getItem("bestScore"));
+}
 if (localStorage.getItem("bestCar")) {
+    // bestBrainOverall = JSON.parse(localStorage.getItem("bestCar"));
+    console.log("MUTATE");
     for (let i = 0; i < cars.length; i++) {
         cars[i].brain = JSON.parse(localStorage.getItem("bestCar"));
         if (i != 0) { NeuralNet.mutate(cars[i].brain, 0.2); }
@@ -37,29 +44,33 @@ const carTraffic = [
 animate();
 
 function saveBestCar() {
-    if (score(optimalCar, carTraffic) > score(bestCarOverall, carTraffic)) {
+    const optimalCarScore = score(optimalCar, carTraffic);
+    if (optimalCarScore > bestScore) {
         localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
-        bestCarOverall = optimalCar;
+        localStorage.setItem("bestScore", JSON.stringify(optimalCarScore));
+        // bestBrainOverall = optimalCar.brain;
     }
-    location.reload(true);
+    location.reload();
 }
 
 function deleteBestCar() {
     localStorage.removeItem("bestCar");
-    location.reload(true);
+    location.reload();
 }
 
-function start() { 
-    play = true; 
-    animate();
+function startPause() { 
+    if (!play) {
+        play = true; 
+        animate();
+    } else {
+        play = false;
+    }
 }
-
-function pause() { play = false; }
 
 function generateCars(n) {
     const cars = [];
     for (let i = 1; i <= n; i++) {
-        cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 5));
+        cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 3));
     }
     return cars;
 }
@@ -93,10 +104,12 @@ function animate(time) {
     for (let i = 0; i < cars.length; i++) {
         if (!cars[i].damaged && totalDistance(optimalCar.x, optimalCar.y, cars[i].x, cars[i].y) <= damagedDistanceThreshold) { 
             notDamagedCarsWithinThreshold = true; 
-            cars[i].carProgressLives--;
+            if (cars[i].lastY <= cars[i].y) {
+                cars[i].carProgressLives--;
+            }
         }
     }
-    //  && (damagedCars * 1.0 / generatedCars) >= damagedThreshold
+
     if (optimalCar.damaged && !notDamagedCarsWithinThreshold) {
         saveBestCar();
     }
