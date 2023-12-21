@@ -14,6 +14,7 @@ const netContext = netCanvas.getContext("2d");
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
 const generatedCars = 500;
 const cars = generateCars(generatedCars);
+const carYStart = 100;
 
 // Getting stored data from previous run if it exists, or else initalize to inital value
 let runData = {x: [1], y: [0]};
@@ -78,18 +79,30 @@ function saveBestCar() {
         localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
         localStorage.setItem("bestScore", JSON.stringify(optimalCarScore));
     }
-    console.log(runData.x);
-    runData.y.push(JSON.parse(localStorage.getItem("bestScore")));
-    runData.x.push(runData.x.length + 1);
-    localStorage.setItem("runData", JSON.stringify(runData));
+    localStorage.setItem("lastRunScore", JSON.stringify(optimalCarScore));
     if (!optimalCar.finished) { location.reload(); }
     else { play = false; }
+}
+/* Basic Logic: Need to find a way to count a run everytime a car is on the start line
+- if (car.y == carYStart) {
+
+}
+
+*/
+
+function saveLastRun() {
+    if (optimalCar.y == carYStart) {
+        runData.y.push(JSON.parse(localStorage.getItem("lastRunScore")));
+        runData.x.push(runData.x.length + 1);
+        localStorage.setItem("runData", JSON.stringify(runData));
+    }
 }
 
 function deleteBestCar() {
     localStorage.removeItem("bestCar");
     localStorage.removeItem("bestScore");
     localStorage.removeItem("runData");
+    localStorage.removeItem("lastRunScore");
     location.reload();
 }
 
@@ -140,6 +153,7 @@ function animate(time) {
         cars[i].update(road.borders, road.finishLine, carTraffic);
     }
     optimalCar = cars.find(c => c.y == (Math.min(...cars.map(c => c.y))) );
+    saveLastRun();
 
     canvas.height = window.innerHeight;
     netCanvas.height = window.innerHeight;
