@@ -32,9 +32,7 @@ button:hover {
     background: black;
 }
 
-#myChart {
+#chartCanvas {
     background: white;
-    width: 100%;
-    max-width: 600px;
     margin-right: 50px;
 }
