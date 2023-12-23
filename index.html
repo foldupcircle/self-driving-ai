@@ -2,14 +2,17 @@
 <head>
     <title>Self-Driving Car AI</title>
     <link rel="stylesheet" href="style.css">
+    <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
 </head>
 <body>
+    <div id="chartCanvas"></div>
     <canvas id="myCanvas"></canvas>
     <div id="verticalButtons">
         <button onclick="deleteBestCar()">↩️</button>
         <button onclick="startPause()">▶️⏹️</button>
     </div>
     <canvas id="netCanvas"></canvas>
+    <script src="chart.js"></script>
     <script src="visualizer.js"></script>
     <script src="neuralnet.js"></script>
     <script src="sensors.js"></script>
@@ -17,6 +20,7 @@
     <script src="road.js"></script>
     <script src="controls.js"></script>
     <script src="car.js"></script>
+    <script src="main-utils.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

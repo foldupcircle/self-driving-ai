@@ -31,3 +31,8 @@ button:hover {
 #netCanvas {
     background: black;
 }
+
+#chartCanvas {
+    background: white;
+    margin-right: 50px;
+}

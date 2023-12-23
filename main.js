@@ -6,14 +6,28 @@ canvas.width = 200;
 const netCanvas = document.getElementById("netCanvas");
 netCanvas.width = 400;
 
+// Declaring Neural Net and Road Contexts
 const context = canvas.getContext("2d");
 const netContext = netCanvas.getContext("2d");
 
+// Getting road and generated cars
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
-const generatedCars = 700;
+const generatedCars = 500;
 const cars = generateCars(generatedCars);
+const carYStart = 100;
+let runNum = 1;
 
-const damagedDistanceThreshold = 100.0; // Must be a float
+// Getting stored data from previous run if it exists, or else initalize to inital value
+let runData = {x: [], y: []};
+if (localStorage.getItem("runData")) {
+    runData = JSON.parse(localStorage.getItem("runData"));
+}
+let lastRunScore = 0;
+if (localStorage.getItem("lastRunScore")) {
+    lastRunScore = JSON.parse(localStorage.getItem("lastRunScore"));
+}
+
+const damagedDistanceThreshold = 150.0; // Must be a float
 let play = true;
 let optimalCar = cars[0];
 let bestScore = 0;
@@ -27,73 +41,92 @@ if (localStorage.getItem("bestCar")) {
     }
 }
 
+// Array of all cars in training set
 const carTraffic = [
-    new Car(road.getLaneCenter(1), -100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -300, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -300, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -500, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -500, 30, 50, "TRAFFIC", 0),
+    /*
+    0 = Left Lane
+    1 = Center Lane
+    2 = Right Lane
+    */
+
+    // Traffic Line 1: 0
+    new Car(road.getLaneCenter(0), -100, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 2: 1
+    new Car(road.getLaneCenter(1), -300, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 3: 2
+    new Car(road.getLaneCenter(2), -500, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 4: 1, 2
     new Car(road.getLaneCenter(1), -700, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(2), -700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 5: 0, 1
+    new Car(road.getLaneCenter(0), -900, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -900, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -1100, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 6: 2
     new Car(road.getLaneCenter(2), -1100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -1300, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 7: 1, 2
     new Car(road.getLaneCenter(1), -1300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1300, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 8: 0, 2
+    new Car(road.getLaneCenter(0), -1500, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(2), -1500, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -1700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -1900, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -1900, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 9: 1, 2
+    new Car(road.getLaneCenter(1), -1700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 10: 0
+    new Car(road.getLaneCenter(0), -1900, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 11: 0, 1
     new Car(road.getLaneCenter(0), -2100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2100, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 12: 0, 2
     new Car(road.getLaneCenter(0), -2300, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -2300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -2300, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 13: 1, 2
     new Car(road.getLaneCenter(1), -2500, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -2700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -2500, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 14: 0, 1
+    new Car(road.getLaneCenter(0), -2700, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -2700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -2900, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 15: 1
     new Car(road.getLaneCenter(1), -2900, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -3100, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 16: 0, 1
     new Car(road.getLaneCenter(1), -3100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -3300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3100, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 17: 1, 2
+    new Car(road.getLaneCenter(1), -3300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3300, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 18: 0, 2
+    new Car(road.getLaneCenter(0), -3500, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(2), -3500, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -3700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 19: 1, 2
+    new Car(road.getLaneCenter(1), -3700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 20: 0, 1
+    new Car(road.getLaneCenter(0), -3900, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -3900, 30, 50, "TRAFFIC", 0)
 ]
 
+// Let the action begin...
+if (lastRunScore == 0) { Chart.drawChart(runData); }
 animate();
-
-function saveBestCar() {
-    const optimalCarScore = score(optimalCar, carTraffic);
-    if (optimalCarScore >= bestScore) {
-        localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
-        localStorage.setItem("bestScore", JSON.stringify(optimalCarScore));
-    }
-    if (!optimalCar.finished) { location.reload(); }
-    else { play = false; }
-}
-
-function deleteBestCar() {
-    localStorage.removeItem("bestCar");
-    localStorage.removeItem("bestScore");
-    location.reload();
-}
-
-function startPause() { 
-    if (!play) {
-        play = true; 
-        animate();
-    } else {
-        play = false;
-    }
-}
-
-function generateCars(n) {
-    const cars = [];
-    for (let i = 1; i <= n; i++) {
-        cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 3));
-    }
-    return cars;
-}
 
 function animate(time) {
     for (let i = 0; i < carTraffic.length; i++) {
@@ -103,6 +136,7 @@ function animate(time) {
         cars[i].update(road.borders, road.finishLine, carTraffic);
     }
     optimalCar = cars.find(c => c.y == (Math.min(...cars.map(c => c.y))) );
+    saveLastRun(runData);
 
     canvas.height = window.innerHeight;
     netCanvas.height = window.innerHeight;
