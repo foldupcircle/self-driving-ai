@@ -1,7 +1,7 @@
 // Util functions that are called in main
 
 function saveBestCar() {
-    const optimalCarScore = score(optimalCar, carTraffic);
+    const optimalCarScore = score(optimalCar, carYStart);
     if (optimalCarScore >= bestScore) {
         localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
         localStorage.setItem("bestScore", JSON.stringify(optimalCarScore));
@@ -9,15 +9,20 @@ function saveBestCar() {
     localStorage.setItem("lastRunScore", JSON.stringify(optimalCarScore));
     if (!optimalCar.finished) { location.reload(); }
     else { 
+        lastRunScore = JSON.parse(localStorage.getItem("lastRunScore"));
         saveLastRun(JSON.parse(localStorage.getItem("runData")));
+        console.log(optimalCar.brain);
         play = false; 
     }
 }
 
 function saveLastRun(runData) {
     if ((lastRunScore != 0 && optimalCar.y == carYStart) || optimalCar.finished) {
-        console.log(runData);
-        runData.y.push(JSON.parse(lastRunScore));
+        runData.y.push(
+            Math.round(
+                (JSON.parse(lastRunScore) / 5100) * 100
+            )
+        );
         runData.x.push(runData.x.length + 1);
         localStorage.setItem("runData", JSON.stringify(runData));
         Chart.drawChart(runData);
@@ -48,3 +53,5 @@ function generateCars(n) {
     }
     return cars;
 }
+
+function score(car, carYStart) { return Math.floor(- (car.y - carYStart)); }

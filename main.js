@@ -53,75 +53,75 @@ const carTraffic = [
     new Car(road.getLaneCenter(0), -100, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 2: 1
-    new Car(road.getLaneCenter(1), -300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -350, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 3: 2
-    new Car(road.getLaneCenter(2), -500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -600, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 4: 1, 2
-    new Car(road.getLaneCenter(1), -700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -850, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -850, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 5: 0, 1
-    new Car(road.getLaneCenter(0), -900, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -1100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -1100, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 6: 2
-    new Car(road.getLaneCenter(2), -1100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1350, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 7: 1, 2
-    new Car(road.getLaneCenter(1), -1300, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -1300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -1600, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1600, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 8: 0, 2
-    new Car(road.getLaneCenter(0), -1500, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -1500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -1850, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1850, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 9: 1, 2
-    new Car(road.getLaneCenter(1), -1700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -1700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -2100, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 10: 0
-    new Car(road.getLaneCenter(0), -1900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -2350, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 11: 0, 1
-    new Car(road.getLaneCenter(0), -2100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -2100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -2600, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -2600, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 12: 0, 2
-    new Car(road.getLaneCenter(0), -2300, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -2300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -2850, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -2850, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 13: 1, 2
-    new Car(road.getLaneCenter(1), -2500, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -2500, 30, 50, "TRAFFIC", 0),
-
-    // Traffic Line 14: 0, 1
-    new Car(road.getLaneCenter(0), -2700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -2700, 30, 50, "TRAFFIC", 0),
-
-    // Traffic Line 15: 1
-    new Car(road.getLaneCenter(1), -2900, 30, 50, "TRAFFIC", 0),
-
-    // Traffic Line 16: 0, 1
     new Car(road.getLaneCenter(1), -3100, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(2), -3100, 30, 50, "TRAFFIC", 0),
 
+    // Traffic Line 14: 0, 1
+    new Car(road.getLaneCenter(0), -3350, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -3350, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 15: 1
+    new Car(road.getLaneCenter(1), -3600, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 16: 0, 1
+    new Car(road.getLaneCenter(1), -3850, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3850, 30, 50, "TRAFFIC", 0),
+
     // Traffic Line 17: 1, 2
-    new Car(road.getLaneCenter(1), -3300, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -3300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -4100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -4100, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 18: 0, 2
-    new Car(road.getLaneCenter(0), -3500, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -3500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), -4350, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -4350, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 19: 1, 2
-    new Car(road.getLaneCenter(1), -3700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -3700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -4600, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -4600, 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 20: 0, 1
-    new Car(road.getLaneCenter(0), -3900, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -3900, 30, 50, "TRAFFIC", 0)
+    new Car(road.getLaneCenter(0), -4850, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), -4850, 30, 50, "TRAFFIC", 0)
 ]
 
 // Let the action begin...

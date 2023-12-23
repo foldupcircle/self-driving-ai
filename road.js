@@ -19,7 +19,7 @@ class Road {
             [{x: this.right, y: this.top}, {x: this.right, y: this.bottom}] // TopRight to BottomRight
         ];
 
-        this.finishLine = [{x: this.left, y: -4100}, {x: this.right, y: -4100}];
+        this.finishLine = [{x: this.left, y: -5000}, {x: this.right, y: -5000}];
     }
 
     draw(context) {
