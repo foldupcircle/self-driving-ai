@@ -11,6 +11,7 @@ function saveBestCar() {
     else { 
         saveLastRun(JSON.parse(localStorage.getItem("runData")));
         console.log(optimalCar.brain);
+        
         play = false; 
     }
 }

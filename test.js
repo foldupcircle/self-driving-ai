@@ -17,15 +17,17 @@ const road = new Road(canvas.width / 2, canvas.width * 0.9);
 let play = true;
 
 bestCar = new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 3);
-bestCar.brain = JSON.parse(bestBrain);
+bestCar.brain = reconstructBrain(bestBrain, bestCar.sensors.rayCount);
 
-carTraffic = generateTraffic();
+const carTraffic = generateTraffic();
+console.log(bestCar.brain);
+testAnimate();
 
 function testAnimate(time) {
     for (let i = 0; i < carTraffic.length; i++) {
         carTraffic[i].update(road.borders);
     }
-
+    // console.log("after carTraffic update");
     bestCar.update(road.borders, road.finishLine, carTraffic);
 
     canvas.height = window.innerHeight;
@@ -43,7 +45,7 @@ function testAnimate(time) {
     context.restore();
 
     netContext.lineDashOffset = -time / 50;
-    Visualizer.drawNetwork(netContext, optimalCar.brain);
+    Visualizer.drawNetwork(netContext, bestCar.brain);
     if (play) {
         requestAnimationFrame(testAnimate);
     }
