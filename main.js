@@ -43,108 +43,90 @@ if (localStorage.getItem("bestCar")) {
 
 // Array of all cars in training set
 const carTraffic = [
-    new Car(road.getLaneCenter(1), -100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -300, 30, 50, "TRAFFIC", 0),
+    /*
+    0 = Left Lane
+    1 = Center Lane
+    2 = Right Lane
+    */
+
+    // Traffic Line 1: 0
+    new Car(road.getLaneCenter(0), -100, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 2: 1
+    new Car(road.getLaneCenter(1), -300, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 3: 2
     new Car(road.getLaneCenter(2), -500, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 4: 1, 2
+    new Car(road.getLaneCenter(1), -700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 5: 0, 1
+    new Car(road.getLaneCenter(0), -900, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -900, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -900, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 6: 2
     new Car(road.getLaneCenter(2), -1100, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 7: 1, 2
     new Car(road.getLaneCenter(1), -1300, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -1300, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -1500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1300, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 8: 0, 2
     new Car(road.getLaneCenter(0), -1500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1500, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 9: 1, 2
     new Car(road.getLaneCenter(1), -1700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -1900, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -1700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 10: 0
     new Car(road.getLaneCenter(0), -1900, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 11: 0, 1
+    new Car(road.getLaneCenter(0), -2100, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -2100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -2100, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 12: 0, 2
     new Car(road.getLaneCenter(0), -2300, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -2500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -2300, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 13: 1, 2
     new Car(road.getLaneCenter(1), -2500, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -2500, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 14: 0, 1
+    new Car(road.getLaneCenter(0), -2700, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -2700, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -2700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 15: 1
     new Car(road.getLaneCenter(1), -2900, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -2900, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 16: 0, 1
     new Car(road.getLaneCenter(1), -3100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -3300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3100, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 17: 1, 2
     new Car(road.getLaneCenter(1), -3300, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3300, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 18: 0, 2
     new Car(road.getLaneCenter(0), -3500, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(2), -3500, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(0), -3700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 19: 1, 2
+    new Car(road.getLaneCenter(1), -3700, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), -3700, 30, 50, "TRAFFIC", 0),
+
+    // Traffic Line 20: 0, 1
+    new Car(road.getLaneCenter(0), -3900, 30, 50, "TRAFFIC", 0),
     new Car(road.getLaneCenter(1), -3900, 30, 50, "TRAFFIC", 0)
 ]
 
 // Let the action begin...
-if (lastRunScore == 0) { drawChart(runData); }
+if (lastRunScore == 0) { Chart.drawChart(runData); }
 animate();
-
-function saveBestCar() {
-    const optimalCarScore = score(optimalCar, carTraffic);
-    if (optimalCarScore >= bestScore) {
-        localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
-        localStorage.setItem("bestScore", JSON.stringify(optimalCarScore));
-    }
-    localStorage.setItem("lastRunScore", JSON.stringify(optimalCarScore));
-    if (!optimalCar.finished) { location.reload(); }
-    else { play = false; }
-}
-
-function saveLastRun(runData) {
-    if (lastRunScore != 0 && optimalCar.y == carYStart) {
-        console.log(runData);
-        runData.y.push(JSON.parse(lastRunScore));
-        runData.x.push(runData.x.length + 1);
-        localStorage.setItem("runData", JSON.stringify(runData));
-        drawChart(runData);
-    }
-}
-
-function deleteBestCar() {
-    localStorage.removeItem("bestCar");
-    localStorage.removeItem("bestScore");
-    localStorage.removeItem("runData");
-    localStorage.removeItem("lastRunScore");
-    location.reload();
-}
-
-function startPause() { 
-    if (!play) {
-        play = true; 
-        animate();
-    } else {
-        play = false;
-    }
-}
-
-function generateCars(n) {
-    const cars = [];
-    for (let i = 1; i <= n; i++) {
-        cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 5));
-    }
-    return cars;
-}
-
-function drawChart(runData) {
-
-    // Define Data
-    const data = [{
-        x: runData.x,
-        y: runData.y,
-        mode: 'lines + markers'
-    }];
-
-    // Define Layout
-    const layout = {
-        xaxis: {range: [1, runData.x.length + 1], title: "Number of Training Runs"},
-        yaxis: {range: [0, 4200], title: "Distance Covered"},
-        title: "Y Distance Covered (Finish Line = 4200) vs # of Training Runs"
-    };
-
-    // Display using Plotly
-    Plotly.newPlot("chartCanvas", data, layout);
-
-}
 
 function animate(time) {
     for (let i = 0; i < carTraffic.length; i++) {
@@ -190,7 +172,6 @@ function animate(time) {
 
     netContext.lineDashOffset = -time / 50;
     Visualizer.drawNetwork(netContext, optimalCar.brain);
-    // drawChart(runData);
     if (play) {
         requestAnimationFrame(animate);
     }
