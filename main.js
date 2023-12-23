@@ -11,11 +11,12 @@ const context = canvas.getContext("2d");
 const netContext = netCanvas.getContext("2d");
 
 // Getting road and generated cars
+const carYStart = 100;
+const trafficCarDistance = 300;
+const finish = -(carYStart - (21 * trafficCarDistance));
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
 const generatedCars = 500;
 const cars = generateCars(generatedCars);
-const carYStart = 100;
-let runNum = 1;
 
 // Getting stored data from previous run if it exists, or else initalize to inital value
 let runData = {x: [], y: []};
@@ -50,78 +51,78 @@ const carTraffic = [
     */
 
     // Traffic Line 1: 0
-    new Car(road.getLaneCenter(0), -100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), carYStart - (trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 2: 1
-    new Car(road.getLaneCenter(1), -350, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (2 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 3: 2
-    new Car(road.getLaneCenter(2), -600, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (3 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 4: 1, 2
-    new Car(road.getLaneCenter(1), -850, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -850, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (4 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (4 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 5: 0, 1
-    new Car(road.getLaneCenter(0), -1100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -1100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), carYStart - (5 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (5 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 6: 2
-    new Car(road.getLaneCenter(2), -1350, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (6 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 7: 1, 2
-    new Car(road.getLaneCenter(1), -1600, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -1600, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (7 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (7 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 8: 0, 2
-    new Car(road.getLaneCenter(0), -1850, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -1850, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), carYStart - (8 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (8 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 9: 1, 2
-    new Car(road.getLaneCenter(1), -2100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -2100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (9 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (9 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 10: 0
-    new Car(road.getLaneCenter(0), -2350, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), carYStart - (10 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 11: 0, 1
-    new Car(road.getLaneCenter(0), -2600, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -2600, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), carYStart - (11 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (11 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 12: 0, 2
-    new Car(road.getLaneCenter(0), -2850, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -2850, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), carYStart - (12 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (12 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 13: 1, 2
-    new Car(road.getLaneCenter(1), -3100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -3100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (13 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (13 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 14: 0, 1
-    new Car(road.getLaneCenter(0), -3350, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -3350, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), carYStart - (14 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (14 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 15: 1
-    new Car(road.getLaneCenter(1), -3600, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (15 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 16: 0, 1
-    new Car(road.getLaneCenter(1), -3850, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -3850, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (16 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (16 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 17: 1, 2
-    new Car(road.getLaneCenter(1), -4100, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -4100, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (17 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (17 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 18: 0, 2
-    new Car(road.getLaneCenter(0), -4350, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -4350, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(0), carYStart - (18 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (18 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 19: 1, 2
-    new Car(road.getLaneCenter(1), -4600, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(2), -4600, 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (19 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(2), carYStart - (19 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
 
     // Traffic Line 20: 0, 1
-    new Car(road.getLaneCenter(0), -4850, 30, 50, "TRAFFIC", 0),
-    new Car(road.getLaneCenter(1), -4850, 30, 50, "TRAFFIC", 0)
+    new Car(road.getLaneCenter(0), carYStart - (20 * trafficCarDistance), 30, 50, "TRAFFIC", 0),
+    new Car(road.getLaneCenter(1), carYStart - (20 * trafficCarDistance), 30, 50, "TRAFFIC", 0)
 ]
 
 // Let the action begin...

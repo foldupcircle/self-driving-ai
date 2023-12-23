@@ -9,7 +9,6 @@ function saveBestCar() {
     localStorage.setItem("lastRunScore", JSON.stringify(optimalCarScore));
     if (!optimalCar.finished) { location.reload(); }
     else { 
-        lastRunScore = JSON.parse(localStorage.getItem("lastRunScore"));
         saveLastRun(JSON.parse(localStorage.getItem("runData")));
         console.log(optimalCar.brain);
         play = false; 
@@ -18,9 +17,10 @@ function saveBestCar() {
 
 function saveLastRun(runData) {
     if ((lastRunScore != 0 && optimalCar.y == carYStart) || optimalCar.finished) {
+        if (optimalCar.finished) { lastRunScore = finish; }
         runData.y.push(
             Math.round(
-                (JSON.parse(lastRunScore) / 5100) * 100
+                (lastRunScore / finish) * 100
             )
         );
         runData.x.push(runData.x.length + 1);
@@ -54,4 +54,4 @@ function generateCars(n) {
     return cars;
 }
 
-function score(car, carYStart) { return Math.floor(- (car.y - carYStart)); }
+function score(car, carYStart) { return Math.round(- (car.y - carYStart)); }
