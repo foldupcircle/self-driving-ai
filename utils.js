@@ -48,26 +48,6 @@ function getRGBA(value){
     return "rgba("+R+","+G+","+B+","+alpha+")";
 }
 
-function score(car, traffic) {
-    let score = 0;
-    // for (let i = 0; i < traffic.length; i++) {
-    //     if (traffic[i].y > car.y) { score += 100; }
-    // }
-    score += Math.floor(- (car.y - 100.0));
-    /*const offsets = car.sensors.sensorReadings.map(s => s == null ? 0 : (1 - s.offset));
-    for (let i = 0; i < offsets.length; i++) {
-        score += offsets[i];
-    }*/
-    
-    return score;
-}
-
 function totalDistance(x1, y1, x2, y2) {
     return Math.sqrt( ((x2 - x1) ** 2) + ((y2 - y1) ** 2) );
-}
-
-let sleepSetTimeout_ctrl;
-function sleep(ms) {
-    clearInterval(sleepSetTimeout_ctrl);
-    return new Promise(resolve => sleepSetTimeout_ctrl = setTimeout(resolve, ms));
 }

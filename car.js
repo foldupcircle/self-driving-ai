@@ -105,7 +105,6 @@ class Car {
 
             ////////// FINISHED? //////////
             if (finishLine && polyIntersect(this.polygon, finishLine)) { 
-                console.log("hello");
                 this.finished = true; 
             }
         }
