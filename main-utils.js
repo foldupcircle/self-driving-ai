@@ -1,6 +1,10 @@
 // Util functions that are called in main
 
 function saveBestCar() {
+    // When training, saves the best car from that run
+    // If car has reaches the finish line, this signifies training is complete
+    // So training is stopped (play = false) and the brain is logged on console
+    // To test this brain, one must copy and paste this result into best-brain.js
     const optimalCarScore = score(optimalCar, carYStart);
     if (optimalCarScore >= bestScore) {
         localStorage.setItem("bestCar", JSON.stringify(optimalCar.brain));
@@ -17,12 +21,11 @@ function saveBestCar() {
 }
 
 function saveLastRun(runData) {
+    // Saves how far the best car in each run went to plot on chart
     if ((lastRunScore != 0 && optimalCar.y == carYStart) || optimalCar.finished) {
         if (optimalCar.finished) { lastRunScore = finish; }
         runData.y.push(
-            Math.round(
-                (lastRunScore / finish) * 100
-            )
+            Math.round( (lastRunScore / finish) * 100 )
         );
         runData.x.push(runData.x.length + 1);
         localStorage.setItem("runData", JSON.stringify(runData));
@@ -30,7 +33,7 @@ function saveLastRun(runData) {
     }
 }
 
-function deleteBestCar() {
+function deleteBestCar() { // Removes all data from local storage
     localStorage.removeItem("bestCar");
     localStorage.removeItem("bestScore");
     localStorage.removeItem("runData");
@@ -38,7 +41,7 @@ function deleteBestCar() {
     location.reload();
 }
 
-function startPause() { 
+function startPause() { // For start/stop button
     if (!play) {
         play = true; 
         animate();
@@ -47,7 +50,7 @@ function startPause() {
     }
 }
 
-function generateCars(n) {
+function generateCars(n) { // Generates n cars for training
     const cars = [];
     for (let i = 1; i <= n; i++) {
         cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 3));

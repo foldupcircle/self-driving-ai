@@ -1,3 +1,5 @@
+// Best Brain from training, used in test.html
+
 const bestBrain = {
     "levels": [
         {

@@ -1,5 +1,6 @@
+// Util functions for test.js
 
-function generateTraffic() {
+function generateTraffic() { // Generates random car traffic
     const carTestTraffic = [];
     for (let i = 0; i < 20; i++) {
         let numCars = Math.floor((Math.random() * 2) + 1);
@@ -18,7 +19,7 @@ function generateTraffic() {
     return carTestTraffic;
 }
 
-function reconstructBrain(brain, rayCount) {
+function reconstructBrain(brain, rayCount) { // Turns best_brain in best-brain.js into NeuralNet object
     const newBrain = new NeuralNet([rayCount, 6, 4]);
     for (let lvl = 0; lvl < brain["levels"].length; lvl++) {
         const curr = brain["levels"][lvl];

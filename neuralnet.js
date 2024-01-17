@@ -17,6 +17,7 @@ class NeuralNet {
     }
 
     static mutate(net, amount=1) {
+        // Mutates the biases and weights by amount
         net.levels.forEach(lvl => {
             for (let i = 0; i < lvl.biases.length; i++) {
                 lvl.biases[i] = lerp(lvl.biases[i], ((Math.random() * 2) - 1), amount);

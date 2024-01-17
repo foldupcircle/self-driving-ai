@@ -1,5 +1,4 @@
 class Car {
-
     constructor(x, y, width, height, carType="TRAFFIC", maxSpeed=3) {
         this.x = x;
         this.y = y;
@@ -14,14 +13,16 @@ class Car {
         this.polygon = [];
         this.damaged = false;
         this.brainAvail = (carType == "AI");
-        this.carProgressLives = 100;
+
+        // Lives car has if it is lagging behind optimal car
+        // Gives lagging cars a chance to live after optimal car dies in case it goes further
+        this.carProgressLives = 100; 
         this.lastY = this.y + 1;
         this.finished = false;
         if (carType != "TRAFFIC") { 
             this.sensors = new Sensors(this); 
             this.brain = new NeuralNet([this.sensors.rayCount, 6, 4]);
         }
-        
     }
 
     draw(context, color, drawSensor=false) {
@@ -30,6 +31,7 @@ class Car {
         if (this.damaged) { context.fillStyle = "gray"; }
         else { context.fillStyle = color; }
 
+        // Drawing the actual car
         context.beginPath();
         if (this.polygon.length > 0) {
             context.moveTo(this.polygon[0].x, this.polygon[0].y);
