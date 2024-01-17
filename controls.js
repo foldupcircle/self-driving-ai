@@ -1,3 +1,6 @@
+// Controls class for controlling car with arrow keys
+// OBSOLETE
+
 class Controls {
 
     constructor(carType) {

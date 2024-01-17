@@ -28,6 +28,7 @@ if (localStorage.getItem("lastRunScore")) {
     lastRunScore = JSON.parse(localStorage.getItem("lastRunScore"));
 }
 
+// Initializing values for best car and score
 const damagedDistanceThreshold = 150.0; // Must be a float
 let play = true;
 let optimalCar = cars[0];
@@ -45,9 +46,10 @@ if (localStorage.getItem("bestCar")) {
 // Array of all cars in training set
 const carTraffic = [
     /*
-    0 = Left Lane
-    1 = Center Lane
-    2 = Right Lane
+    For road.getLanCenter(x)
+    x = 0 => Left Lane
+    x = 1 => Center Lane
+    x = 2 => Right Lane
     */
 
     // Traffic Line 1: 0
@@ -126,35 +128,45 @@ const carTraffic = [
 ]
 
 // Let the action begin...
-if (lastRunScore == 0) { Chart.drawChart(runData); }
+if (lastRunScore == 0) { Chart.drawChart(runData); } // Draws chart of training
 animate();
 
 function animate(time) {
+    /*
+    Main function that animates and calls everything that needs to be run
+    */
+
+    // Updating traffic and training cars 
     for (let i = 0; i < carTraffic.length; i++) {
         carTraffic[i].update(road.borders);
     }
     for (let i = 0; i < cars.length; i++) {
         cars[i].update(road.borders, road.finishLine, carTraffic);
     }
+
+    // Find the optimal car (car that's the furthest)
     optimalCar = cars.find(c => c.y == (Math.min(...cars.map(c => c.y))) );
     saveLastRun(runData);
 
     canvas.height = window.innerHeight;
     netCanvas.height = window.innerHeight;
 
+    // Draw everything to be displayed
     context.save();
     context.translate(0, -optimalCar.y + canvas.height * 0.8);
     road.draw(context);
     for (let i = 0; i < carTraffic.length; i++) {
         carTraffic[i].draw(context, "red");
     }
-    context.globalAlpha = 0.2;
+    context.globalAlpha = 0.2; // Transparency variable
     for (let i = 0; i < cars.length; i++) {
         cars[i].draw(context, "blue");
     }
     context.globalAlpha = 1;
     optimalCar.draw(context, "blue", true);
     
+    // Allows lagging cars to continue past the optimal car if within 
+    // damagedDistanceThreshold and until carProgressLives runs out
     let notDamagedCarsWithinThreshold = false;
     for (let i = 0; i < cars.length; i++) {
         if (!cars[i].damaged && totalDistance(optimalCar.x, optimalCar.y, cars[i].x, cars[i].y) <= damagedDistanceThreshold) { 
@@ -165,12 +177,14 @@ function animate(time) {
         }
     }
 
+    // If run is over
     if ((optimalCar.damaged && !notDamagedCarsWithinThreshold) || optimalCar.finished) {
         saveBestCar();
     }
 
     context.restore();
 
+    // Draw network and call animate again if play = true
     netContext.lineDashOffset = -time / 50;
     Visualizer.drawNetwork(netContext, optimalCar.brain);
     if (play) {

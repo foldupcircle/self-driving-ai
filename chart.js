@@ -1,3 +1,5 @@
+// Draws chart of training
+
 class Chart {
     static drawChart(runData) {
 

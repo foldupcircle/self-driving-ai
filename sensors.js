@@ -34,12 +34,15 @@ class Sensors {
     }
 
     #getReading(ray, borders, carTraffic) {
+
+        // Get sensor readings from intersection with borders
         let values = [];
         for (let i = 0; i < borders.length; i++) {
             const val = getIntersection(ray[0], ray[1], borders[i][0], borders[i][1]);
             if (val) { values.push(val); }
         }
 
+        // ...with traffic cars
         for (let i = 0; i < carTraffic.length; i++) {
             const trafficCar = carTraffic[i].polygon;
             for (let j = 0; j < trafficCar.length; j++) {
@@ -48,6 +51,7 @@ class Sensors {
             }
         }
 
+        // Get the min of all readings (closest obstacle to car)
         if (values.length == 0) { return null; }
         else {
             const offsets = values.map(o => o.offset);
